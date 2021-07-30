@@ -1,0 +1,19 @@
+{
+  "name": "argenti",
+  "version": "1.0.0",
+  "description": "",
+  "main": "poker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NathanJReidy/poker-nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NathanJReidy/poker-nodejs/issues"
+  },
+  "homepage": "https://github.com/NathanJReidy/poker-nodejs#readme"
+}
