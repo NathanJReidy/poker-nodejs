@@ -15,6 +15,7 @@ const uniqueCards = [
 ];
 const suits = ["D", "H", "S", "C"];
 const allCards = [];
+const handWinCount = [{ playerOne: null }, { playerTwo: null }];
 
 // Creates data for all possible card combinations
 const createAllCards = (uniqueCards, suits) => {
@@ -27,3 +28,14 @@ const createAllCards = (uniqueCards, suits) => {
 
 createAllCards(uniqueCards, suits);
 console.log(allCards);
+
+const createHands = () => {
+  return;
+};
+
+const checkResults = (playerOneCards, playerTwoCards) => {
+  // playerOneCards and playerTwoCards are arrays of 5 randomly selected cards each
+  // check results of player one's cards
+  // check results of player two's cards
+  // check winner and add one to handWinCount for the winner
+};
