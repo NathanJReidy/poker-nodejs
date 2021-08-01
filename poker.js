@@ -194,7 +194,9 @@ const checkPair = (playerCards, playerIndex) => {
 
 // Checks if the player has a four of a kind
 const checkFourOfAKind = (playerCards, playerIndex) => {
-  if (checkPair(playerCards)[0].count == "4") {
+  let fourArray = checkPair(playerCards).filter((card) => card.count == "4");
+
+  if (fourArray.length == 1 && fourArray[0].count == "4") {
     console.log("Four of a kind!");
 
     return true;
@@ -294,7 +296,7 @@ const checkTieBreaker = (playerOneCards, playerTwoCards) => {
   const allPlayers = [playerOneCards, playerTwoCards];
   allPlayers.forEach((playerCards, index) => {
     let playerIndex = index;
-    checkHighCard(playerOneCards, playerIndex);
+    checkHighCard(playerCards, playerIndex);
   });
 
   // Determine which player has the highest card
@@ -306,12 +308,14 @@ const checkTieBreaker = (playerOneCards, playerTwoCards) => {
     ) {
       console.log("Player 1 wins in a tie break with the highest card! ");
       playerWins[0].playerOneHandWins += 1;
+      break;
     } else if (
       playerRanks[0].playerOneHighCardRanks[i] <
       playerRanks[1].playerTwoHighCardRanks[i]
     ) {
       console.log("Player 2 wins in a tie break with the highest card! ");
       playerWins[1].playerTwoHandWins += 1;
+      break;
     }
   }
 };
@@ -340,7 +344,7 @@ const checkResults = (playerOneCards, playerTwoCards) => {
     } else if (checkStraight(playerCards, playerIndex)) {
       updatePlayerComboRank(playerIndex, 5);
     } else if (checkThreeOfAKind(playerCards, playerIndex)) {
-      cupdatePlayerComboRank(playerIndex, 4);
+      updatePlayerComboRank(playerIndex, 4);
     } else if (checkTwoPair(playerCards, playerIndex)) {
       updatePlayerComboRank(playerIndex, 3);
     } else if (checkTwoOfAKind(playerCards, playerIndex)) {
@@ -373,8 +377,6 @@ const checkWinner = (playerOneCards, playerTwoCards) => {
   }
 };
 
-createAllCards(uniqueCards, suits);
-
 // console.log(checkPair(["JS", "10D", "10D", "10H", "JC"]));
 
 // console.log(checkRoyalFlush(["KS", "AS", "QS", "10S", "JD"]));
@@ -388,5 +390,26 @@ createAllCards(uniqueCards, suits);
 // console.log(checkTwoOfAKind(["10S", "10S", "5S", "JS", "9S"]));
 // console.log(checkHighCard(["10S", "2D", "10D", "JH", "JC"]));
 
-checkResults(["KS", "AS", "JD", "10S", "JD"], ["AS", "AS", "AD", "KS", "KD"]);
-checkWinner(["KS", "AS", "JD", "10S", "JD"], ["AS", "AS", "AD", "KS", "KD"]);
+const playGame = (numberOfGames) => {
+  createAllCards(uniqueCards, suits);
+
+  for (let i = 0; i < numberOfGames; i++) {
+    let playerOneCardsArray = [];
+    let playerTwoCardsArray = [];
+
+    for (let i = 0; i < 5; i++) {
+      playerOneCardsArray.push(
+        allCards[Math.floor(Math.random() * allCards.length)]
+      );
+      playerTwoCardsArray.push(
+        allCards[Math.floor(Math.random() * allCards.length)]
+      );
+    }
+
+    checkResults(playerOneCardsArray, playerTwoCardsArray);
+    checkWinner(playerOneCardsArray, playerTwoCardsArray);
+  }
+};
+
+// Play game 100 times
+playGame(10);
