@@ -156,6 +156,17 @@ const checkPair = (playerCards) => {
   return pairValues;
 };
 
+// Checks if the player has a four of a kind
+const checkFourOfAKind = (playerCards) => {
+  if (checkPair(playerCards)[0].count == "4") {
+    console.log("Four of a kind!");
+    return true;
+  } else {
+    console.log("No four of a kind!");
+    return false;
+  }
+};
+
 const checkResults = (playerOneCards, playerTwoCards) => {
   // playerOneCards and playerTwoCards are each an array of 5 randomly selected cards
   // check results of player one's cards
@@ -168,5 +179,6 @@ createAllCards(uniqueCards, suits);
 // console.log(checkStraight(["9S", "8D", "QD", "10H", "JC"]));
 // console.log(checkPair(["JS", "10D", "10D", "10H", "JC"]));
 // console.log(checkRoyalFlush(["KS", "AS", "QS", "10S", "JD"]));
-
-console.log(checkStraightFlush(["9S", "10S", "7S", "JS", "8S"]));
+// console.log(checkStraightFlush(["9S", "10S", "7S", "JS", "8S"]));
+// console.log(checkStraightFlush(["9S", "10S", "7S", "JS", "8S"]));
+// console.log(checkFourOfAKind(["10S", "10S", "7S", "10S", "10S"]));
