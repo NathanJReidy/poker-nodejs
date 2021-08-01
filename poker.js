@@ -220,6 +220,25 @@ const checkTwoPair = (playerCards) => {
   }
 };
 
+const checkHighCard = (playerCards) => {
+  const cardIndexInUniqueCards = [];
+
+  playerCards.forEach((card, index) => {
+    // Match the specific card to its index in unique cards
+    if (!card.includes("10")) {
+      cardIndexInUniqueCards.push(uniqueCards.indexOf(card[0]));
+    } else {
+      cardIndexInUniqueCards.push(uniqueCards.indexOf(card.substr(0, 2)));
+    }
+  });
+  // Sort items in array in ascending order
+  cardIndexInUniqueCards.sort((a, b) => a - b);
+  let maxIndex = Math.max(...cardIndexInUniqueCards);
+  console.log(`maxIndex is ${maxIndex}`);
+  let highCard = uniqueCards[maxIndex];
+  console.log(`High card is ${highCard}`);
+};
+
 const checkResults = (playerOneCards, playerTwoCards) => {
   // playerOneCards and playerTwoCards are each an array of 5 randomly selected cards
   // check results of player one's cards
@@ -228,16 +247,16 @@ const checkResults = (playerOneCards, playerTwoCards) => {
 };
 
 createAllCards(uniqueCards, suits);
-// console.log(checkRoyalFlush(["2E", "3E", "8E", "9E", "10E"]));
 
 // console.log(checkPair(["JS", "10D", "10D", "10H", "JC"]));
+
 // console.log(checkRoyalFlush(["KS", "AS", "QS", "10S", "JD"]));
 // console.log(checkStraightFlush(["9S", "10S", "7S", "JS", "8S"]));
-// console.log(checkStraightFlush(["9S", "10S", "7S", "JS", "8S"]));
 // console.log(checkFourOfAKind(["10S", "10S", "7S", "10S", "10S"]));
-// console.log(checkThreeOfAKind(["10S", "10S", "5S", "10S", "9S"]));
-// console.log(checkTwoOfAKind(["10S", "10S", "5S", "JS", "9S"]));
 // console.log(checkFullHouse(["QS", "QS", "10S", "10S", "QS"]));
 // console.log(checkFlush(["QS", "QS", "10S", "10S", "QS"]));
 // console.log(checkStraight(["9S", "8D", "7D", "10H", "JC"]));
+// console.log(checkThreeOfAKind(["10S", "10S", "5S", "10S", "9S"]));
 // console.log(checkTwoPair(["10S", "AD", "10D", "JH", "JC"]));
+// console.log(checkTwoOfAKind(["10S", "10S", "5S", "JS", "9S"]));
+// console.log(checkHighCard(["10S", "2D", "10D", "JH", "JC"]));
