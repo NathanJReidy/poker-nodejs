@@ -189,6 +189,20 @@ const checkThreeOfAKind = (playerCards) => {
   }
 };
 
+// Checks if the player has a two of a kind (pair)
+const checkTwoOfAKind = (playerCards) => {
+  if (
+    checkPair(playerCards).length == 1 &&
+    checkPair(playerCards)[0].count == "2"
+  ) {
+    console.log("Pair: Two cards of same value");
+    return true;
+  } else {
+    console.log("Not a pair!");
+    return false;
+  }
+};
+
 const checkResults = (playerOneCards, playerTwoCards) => {
   // playerOneCards and playerTwoCards are each an array of 5 randomly selected cards
   // check results of player one's cards
@@ -205,3 +219,4 @@ createAllCards(uniqueCards, suits);
 // console.log(checkStraightFlush(["9S", "10S", "7S", "JS", "8S"]));
 // console.log(checkFourOfAKind(["10S", "10S", "7S", "10S", "10S"]));
 // console.log(checkThreeOfAKind(["10S", "10S", "5S", "10S", "9S"]));
+// console.log(checkTwoOfAKind(["10S", "10S", "5S", "JS", "9S"]));
