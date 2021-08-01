@@ -46,8 +46,7 @@ const checkSuitIdentical = (playerCards) => {
   return true;
 };
 
-// let royalCards = ["10", "J", "Q", "K", "A"];
-
+// Checks if the player has a royal flush
 const checkRoyalFlush = (playerCards) => {
   if (checkSuitIdentical(playerCards)) {
     let royalCards = ["10", "J", "Q", "K", "A"];
@@ -95,6 +94,15 @@ const checkStraight = (playerCards) => {
   }
 
   return "We have a straight!";
+};
+
+// Checks if player has a straight flush
+const checkStraightFlush = (playerCards) => {
+  if (checkStraight(playerCards) && checkSuitIdentical(playerCards)) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 // Check for a pair by adding unique values to a new array called pairValues
