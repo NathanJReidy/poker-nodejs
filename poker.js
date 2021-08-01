@@ -167,6 +167,28 @@ const checkFourOfAKind = (playerCards) => {
   }
 };
 
+// const checkFullHouse = (playerCards) => {
+//     if (checkPair(playerCards).length == 2) {
+//         if (checkPair(playerCards)[0].count + checkPair(playerCards)[1].count == 5) {
+//             console.log("Full house: Three of a kind and a Pair");
+//         }
+//     }
+// }
+
+// Checks if the player has a three of a kind
+const checkThreeOfAKind = (playerCards) => {
+  if (
+    checkPair(playerCards).length == 1 &&
+    checkPair(playerCards)[0].count == "3"
+  ) {
+    console.log("Three of a kind!");
+    return true;
+  } else {
+    console.log("Not a three of a kind!");
+    return false;
+  }
+};
+
 const checkResults = (playerOneCards, playerTwoCards) => {
   // playerOneCards and playerTwoCards are each an array of 5 randomly selected cards
   // check results of player one's cards
@@ -182,3 +204,4 @@ createAllCards(uniqueCards, suits);
 // console.log(checkStraightFlush(["9S", "10S", "7S", "JS", "8S"]));
 // console.log(checkStraightFlush(["9S", "10S", "7S", "JS", "8S"]));
 // console.log(checkFourOfAKind(["10S", "10S", "7S", "10S", "10S"]));
+// console.log(checkThreeOfAKind(["10S", "10S", "5S", "10S", "9S"]));
