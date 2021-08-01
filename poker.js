@@ -16,7 +16,6 @@ const uniqueCards = [
 const suits = ["D", "H", "S", "C"];
 const allCards = [];
 const handWinCount = [{ playerOne: null }, { playerTwo: null }];
-const royalFlush = ["10"];
 
 // Creates data for all possible card combinations and stores it in allCards
 const createAllCards = (uniqueCards, suits) => {
@@ -38,11 +37,34 @@ const checkSuitIdentical = (playerCards) => {
       playerCards[i][playerCards[i].length - 1] !=
       playerCards[i + 1][playerCards[i + 1].length - 1]
     ) {
-      return "Suits are different";
+      console.log("Suits are different");
+      return false;
     }
   }
 
-  return "Suits are identical";
+  console.log("Suits are identical");
+  return true;
+};
+
+// let royalCards = ["10", "J", "Q", "K", "A"];
+
+const checkRoyalFlush = (playerCards) => {
+  if (checkSuitIdentical(playerCards)) {
+    let royalCards = ["10", "J", "Q", "K", "A"];
+    let uniqueCardsRoyalTest = [];
+    playerCards.forEach((card, index) => {
+      if (!card.includes("10")) {
+        uniqueCardsRoyalTest.push(card[0]);
+      } else {
+        uniqueCardsRoyalTest.push(card.substr(0, 2));
+      }
+    });
+
+    return royalCards.every((i) => uniqueCardsRoyalTest.includes(i));
+  }
+
+  console.log("No royal flush!");
+  return false;
 };
 
 // Checks if the player has a straight
@@ -77,7 +99,7 @@ const checkStraight = (playerCards) => {
 
 // Check for a pair by adding unique values to a new array called pairValues
 const checkPair = (playerCards) => {
-  // We want to find each card in our uniqueCards array and see if their indexes are consecutive
+  // We want to find each card in our uniqueCards array and see if the differences between their indexes is 0
   const cardIndexInUniqueCards = [];
   let pairValues = [];
   playerCards.forEach((card, index) => {
@@ -134,4 +156,5 @@ const checkResults = (playerOneCards, playerTwoCards) => {
 createAllCards(uniqueCards, suits);
 // console.log(checkRoyalFlush(["2E", "3E", "8E", "9E", "10E"]));
 // console.log(checkStraight(["9S", "8D", "QD", "10H", "JC"]));
-console.log(checkPair(["8S", "7D", "7D", "10H", "10C"]));
+// console.log(checkPair(["JS", "10D", "10D", "10H", "JC"]));
+console.log(checkRoyalFlush(["KS", "AS", "QS", "10S", "JD"]));
