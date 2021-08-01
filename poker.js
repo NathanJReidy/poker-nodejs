@@ -177,10 +177,10 @@ const checkFourOfAKind = (playerCards) => {
 
 // Checks if the player has a three of a kind
 const checkThreeOfAKind = (playerCards) => {
-  if (
-    checkPair(playerCards).length == 1 &&
-    checkPair(playerCards)[0].count == "3"
-  ) {
+  let threeArray = checkPair(playerCards).filter((card) => card.count == "3");
+  console.log(`threeArray is ${JSON.stringify(threeArray)}`);
+
+  if (threeArray.length == 1 && threeArray[0].count == "3") {
     console.log("Three of a kind!");
     return true;
   } else {
@@ -191,14 +191,24 @@ const checkThreeOfAKind = (playerCards) => {
 
 // Checks if the player has a two of a kind (pair)
 const checkTwoOfAKind = (playerCards) => {
-  if (
-    checkPair(playerCards).length == 1 &&
-    checkPair(playerCards)[0].count == "2"
-  ) {
+  let twoArray = checkPair(playerCards).filter((card) => card.count == "2");
+  console.log(`twoArray is ${JSON.stringify(twoArray)}`);
+  if (twoArray.length == 1 && twoArray[0].count == "2") {
     console.log("Pair: Two cards of same value");
     return true;
   } else {
     console.log("Not a pair!");
+    return false;
+  }
+};
+
+// Checks it the player has a full house: Three of a kind and a Pair
+const checkFullHouse = (playerCards) => {
+  if (checkThreeOfAKind(playerCards) && checkTwoOfAKind(playerCards)) {
+    console.log("Full house: Three of a kind and a pair!");
+    return true;
+  } else {
+    console.log("Not a full house!");
     return false;
   }
 };
@@ -220,3 +230,4 @@ createAllCards(uniqueCards, suits);
 // console.log(checkFourOfAKind(["10S", "10S", "7S", "10S", "10S"]));
 // console.log(checkThreeOfAKind(["10S", "10S", "5S", "10S", "9S"]));
 // console.log(checkTwoOfAKind(["10S", "10S", "5S", "JS", "9S"]));
+// console.log(checkFullHouse(["QS", "QS", "10S", "10S", "QS"]));
