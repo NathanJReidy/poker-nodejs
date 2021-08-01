@@ -242,6 +242,29 @@ const checkHighCard = (playerCards) => {
 const checkResults = (playerOneCards, playerTwoCards) => {
   // playerOneCards and playerTwoCards are each an array of 5 randomly selected cards
   // check results of player one's cards
+
+  if (checkRoyalFlush(playerOneCards)) {
+    console.log("Royal flush");
+  } else if (checkStraightFlush(playerOneCards)) {
+    console.log("Straight flush");
+  } else if (checkFourOfAKind(playerOneCards)) {
+    console.log("Four of a kind");
+  } else if (checkFullHouse(playerOneCards)) {
+    console.log("Full house");
+  } else if (checkFlush(playerOneCards)) {
+    console.log("Flush");
+  } else if (checkStraight(playerOneCards)) {
+    console.log("Straight");
+  } else if (checkThreeOfAKind(playerOneCards)) {
+    console.log("Three of a kind");
+  } else if (checkTwoPair(playerOneCards)) {
+    console.log("Two pair");
+  } else if (checkTwoOfAKind(playerOneCards)) {
+    console.log("Two of a kind (pair)");
+  } else if (checkHighCard(playerOneCards)) {
+    console.log("High card");
+  }
+
   // check results of player two's cards
   // check winner and add one to handWinCount for the winner
 };
