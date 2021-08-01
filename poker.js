@@ -1,3 +1,20 @@
+const readline = require("readline");
+const fs = require("fs");
+
+// const readInterface = readline.createInterface({
+//   input: fs.createReadStream("./poker-hands.txt"),
+//   output: process.stdout,
+//   console: false,
+// });
+
+// readInterface.on("line", (line) => console.log(line));
+
+let array = fs.readFileSync("./poker-hands.txt").toString().split("\n");
+// for (let i in array) {
+//   console.log(array[i]);
+// }
+console.log(array);
+
 const uniqueCards = [
   "2",
   "3",
@@ -397,14 +414,23 @@ const playGame = (numberOfGames) => {
     let playerOneCardsArray = [];
     let playerTwoCardsArray = [];
 
-    for (let i = 0; i < 5; i++) {
-      playerOneCardsArray.push(
-        allCards[Math.floor(Math.random() * allCards.length)]
-      );
-      playerTwoCardsArray.push(
-        allCards[Math.floor(Math.random() * allCards.length)]
-      );
-    }
+    // Randomly allocates 5 cards to each player
+    // for (let i = 0; i < 5; i++) {
+    //   playerOneCardsArray.push(
+    //     allCards[Math.floor(Math.random() * allCards.length)]
+    //   );
+    //   playerTwoCardsArray.push(
+    //     allCards[Math.floor(Math.random() * allCards.length)]
+    //   );
+    // }
+
+    // Test file:
+    const newArr = array[i].split(" ");
+    // console.log(newArr);
+    playerOneCardsArray = newArr.slice(0, 5);
+    playerTwoCardsArray = newArr.slice(5, 10);
+    // console.log(playerOneCardsArray);
+    // console.log(playerTwoCardsArray);
 
     checkResults(playerOneCardsArray, playerTwoCardsArray);
     checkWinner(playerOneCardsArray, playerTwoCardsArray);
@@ -412,4 +438,7 @@ const playGame = (numberOfGames) => {
 };
 
 // Play game 100 times
-playGame(10);
+// playGame(100);
+
+// Test file
+playGame(array.length);
