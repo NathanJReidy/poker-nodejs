@@ -33,14 +33,14 @@ const playerRanks = [
   {
     playerOneComboRank: null,
     playerOneHighCardRank: null,
-    playerOneHandWins: null,
   },
   {
     playerTwoComboRank: null,
     playerTwoHighCardRank: null,
-    playerTwoHandWins: null,
   },
 ];
+
+const playerWins = [{ playerOneHandWins: 0 }, { playerTwoHandWins: 0 }];
 
 // Creates data for all possible card combinations and stores it in allCards
 const createAllCards = (uniqueCards, suits) => {
@@ -143,7 +143,7 @@ const checkStraightFlush = (playerCards, playerIndex) => {
   }
 };
 
-// Check for a pair by adding unique values to a new array called pairValues
+// CHECKS THE FREQUENCY OF CARDS, FOR ANY CARDS THAT APPEAR 2 OR MORE TIMES, AND STORES THEM IN AN ARRAY OF OBJECT/S
 const checkPair = (playerCards, playerIndex) => {
   // We want to find each card in our uniqueCards array and see if the differences between their indexes is 0
   const cardIndexInUniqueCards = [];
@@ -319,6 +319,23 @@ const checkResults = (playerOneCards, playerTwoCards) => {
   // check winner and add one to handWinCount for the winner
 };
 
+const checkWinner = () => {
+  if (playerRanks[0].playerOneComboRank > playerRanks[1].playerTwoComboRank) {
+    playerWins[0].playerOneHandWins += 1;
+    console.log(playerWins);
+  } else if (
+    playerRanks[1].playerTwoComboRank > playerRanks[0].playerOneComboRank
+  ) {
+    playerWins[1].playerTwoHandWins += 1;
+    console.log(playerWins);
+  } else if (
+    playerRanks[0].playerOneComboRank == playerRanks[1].playerTwoComboRank
+  ) {
+    console.log("Tie!");
+    console.log(playerWins);
+  }
+};
+
 createAllCards(uniqueCards, suits);
 
 // console.log(checkPair(["JS", "10D", "10D", "10H", "JC"]));
@@ -335,3 +352,4 @@ createAllCards(uniqueCards, suits);
 // console.log(checkHighCard(["10S", "2D", "10D", "JH", "JC"]));
 
 checkResults(["KS", "AS", "JD", "10S", "JD"], ["AS", "AS", "AD", "KS", "KD"]);
+checkWinner();
