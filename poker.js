@@ -30,25 +30,25 @@ const createHands = () => {
   return;
 };
 
-// Checks if the player has the same suits for each card
-const checkSuitIdentical = (playerCards) => {
+// Checks if the player has the same suits for each card (i.e. a flush)
+const checkFlush = (playerCards) => {
   for (let i = 0; i < playerCards.length - 1; i++) {
     if (
       playerCards[i][playerCards[i].length - 1] !=
       playerCards[i + 1][playerCards[i + 1].length - 1]
     ) {
-      console.log("Suits are different");
+      console.log("Not a flush! Suits are different");
       return false;
     }
   }
 
-  console.log("Suits are identical");
+  console.log("Flush! Suits are identical");
   return true;
 };
 
 // Checks if the player has a royal flush
 const checkRoyalFlush = (playerCards) => {
-  if (checkSuitIdentical(playerCards)) {
+  if (checkFlush(playerCards)) {
     let royalCards = ["10", "J", "Q", "K", "A"];
     let uniqueCardsRoyalTest = [];
     playerCards.forEach((card, index) => {
@@ -100,7 +100,7 @@ const checkStraight = (playerCards) => {
 
 // Checks if player has a straight flush
 const checkStraightFlush = (playerCards) => {
-  if (checkStraight(playerCards) && checkSuitIdentical(playerCards)) {
+  if (checkStraight(playerCards) && checkFlush(playerCards)) {
     return true;
   } else {
     return false;
@@ -167,14 +167,6 @@ const checkFourOfAKind = (playerCards) => {
   }
 };
 
-// const checkFullHouse = (playerCards) => {
-//     if (checkPair(playerCards).length == 2) {
-//         if (checkPair(playerCards)[0].count + checkPair(playerCards)[1].count == 5) {
-//             console.log("Full house: Three of a kind and a Pair");
-//         }
-//     }
-// }
-
 // Checks if the player has a three of a kind
 const checkThreeOfAKind = (playerCards) => {
   let threeArray = checkPair(playerCards).filter((card) => card.count == "3");
@@ -213,6 +205,21 @@ const checkFullHouse = (playerCards) => {
   }
 };
 
+// Checks if the player has a two pair: Two different pairs
+const checkTwoPair = (playerCards) => {
+  if (
+    checkPair(playerCards).length == 2 &&
+    checkPair(playerCards)[0].count == "2" &&
+    checkPair(playerCards)[1].count == "2"
+  ) {
+    console.log("Two pairs: Two different pairs!");
+    return true;
+  } else {
+    console.log("Not a two pair!");
+    return false;
+  }
+};
+
 const checkResults = (playerOneCards, playerTwoCards) => {
   // playerOneCards and playerTwoCards are each an array of 5 randomly selected cards
   // check results of player one's cards
@@ -222,7 +229,7 @@ const checkResults = (playerOneCards, playerTwoCards) => {
 
 createAllCards(uniqueCards, suits);
 // console.log(checkRoyalFlush(["2E", "3E", "8E", "9E", "10E"]));
-// console.log(checkStraight(["9S", "8D", "QD", "10H", "JC"]));
+
 // console.log(checkPair(["JS", "10D", "10D", "10H", "JC"]));
 // console.log(checkRoyalFlush(["KS", "AS", "QS", "10S", "JD"]));
 // console.log(checkStraightFlush(["9S", "10S", "7S", "JS", "8S"]));
@@ -231,3 +238,6 @@ createAllCards(uniqueCards, suits);
 // console.log(checkThreeOfAKind(["10S", "10S", "5S", "10S", "9S"]));
 // console.log(checkTwoOfAKind(["10S", "10S", "5S", "JS", "9S"]));
 // console.log(checkFullHouse(["QS", "QS", "10S", "10S", "QS"]));
+// console.log(checkFlush(["QS", "QS", "10S", "10S", "QS"]));
+// console.log(checkStraight(["9S", "8D", "7D", "10H", "JC"]));
+// console.log(checkTwoPair(["10S", "AD", "10D", "JH", "JC"]));
