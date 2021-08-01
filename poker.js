@@ -89,11 +89,13 @@ const checkStraight = (playerCards) => {
         parseInt(cardIndexInUniqueCards[i]) !==
       1
     ) {
-      return "Not a straight!";
+      console.log("Not a straight!");
+      return false;
     }
   }
 
-  return "We have a straight!";
+  console.log("We have a straight!");
+  return true;
 };
 
 // Checks if player has a straight flush
@@ -165,4 +167,6 @@ createAllCards(uniqueCards, suits);
 // console.log(checkRoyalFlush(["2E", "3E", "8E", "9E", "10E"]));
 // console.log(checkStraight(["9S", "8D", "QD", "10H", "JC"]));
 // console.log(checkPair(["JS", "10D", "10D", "10H", "JC"]));
-console.log(checkRoyalFlush(["KS", "AS", "QS", "10S", "JD"]));
+// console.log(checkRoyalFlush(["KS", "AS", "QS", "10S", "JD"]));
+
+console.log(checkStraightFlush(["9S", "10S", "7S", "JS", "8S"]));
