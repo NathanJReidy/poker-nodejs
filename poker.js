@@ -216,6 +216,46 @@ const checkFourOfAKind = (playerCards, playerIndex) => {
   if (fourArray.length == 1 && fourArray[0].count == "4") {
     console.log("Four of a kind!");
 
+    // Update the player's high card index ranking:
+    const cardIndexInUniqueCards = [];
+
+    // Adds the rankings of the three of a kind to the new array, three times
+    for (let i = 0; i < 4; i++) {
+      cardIndexInUniqueCards.push(uniqueCards.indexOf(fourArray[0].card));
+    }
+
+    // Checks for the left over cards that aren't part of the four of a kind
+    // and puts them at the end of the ranking array in highest to lowest order
+    let leftOverCards = playerCards.filter((card) => {
+      return !card.includes(fourArray[0].card);
+    });
+
+    // Used to store left over cards' index rankings before sorting in descending order
+    let leftOverArr = [];
+
+    leftOverCards
+      .sort((a, b) => b - a)
+      .forEach((card) => {
+        if (!card.toString().includes("10")) {
+          leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 1)));
+        } else {
+          leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 2)));
+        }
+      });
+
+    // Sorts left over cards from highest to lowest order, and puts them after the pair in terms of index ranking
+    leftOverArr.sort((a, b) => b - a);
+
+    cardIndexInUniqueCards.push(...leftOverArr);
+    console.log(cardIndexInUniqueCards);
+
+    // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
+    if (playerIndex == 0) {
+      playerRanks[0].playerOneHighCardRanks = cardIndexInUniqueCards;
+    } else if (playerIndex == 1) {
+      playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
+    }
+
     return true;
   } else {
     // console.log("No four of a kind!");
@@ -613,4 +653,5 @@ createAllCards(uniqueCards, suits);
 // console.log(checkTwoPair(["10S", "AD", "AS", "KH", "KC"]));
 // console.log(checkFullHouse(["QS", "QS", "2S", "2S", "2S"]));
 // console.log(checkTwoOfAKind(["KS", "10S", "5S", "KS", "9S"]));
-console.log(checkThreeOfAKind(["AS", "AS", "2S", "AS", "10S"]));
+// console.log(checkThreeOfAKind(["AS", "AS", "2S", "AS", "10S"]));
+// console.log(checkFourOfAKind(["AS", "AS", "2S", "AS", "AS"]));
