@@ -231,6 +231,46 @@ const checkThreeOfAKind = (playerCards, playerIndex) => {
   if (threeArray.length == 1 && threeArray[0].count == "3") {
     console.log("Three of a kind!");
 
+    // Update the player's high card index ranking:
+    const cardIndexInUniqueCards = [];
+
+    // Adds the rankings of the three of a kind to the new array, three times
+    for (let i = 0; i < 3; i++) {
+      cardIndexInUniqueCards.push(uniqueCards.indexOf(threeArray[0].card));
+    }
+
+    // Checks for the left over cards that aren't part of the two pair
+    // and puts them at the end of the ranking array in highest to lowest order
+    let leftOverCards = playerCards.filter((card) => {
+      return !card.includes(threeArray[0].card);
+    });
+
+    // Used to store left over cards' index rankings before sorting in descending order
+    let leftOverArr = [];
+
+    leftOverCards
+      .sort((a, b) => b - a)
+      .forEach((card) => {
+        if (!card.toString().includes("10")) {
+          leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 1)));
+        } else {
+          leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 2)));
+        }
+      });
+
+    // Sorts left over cards from highest to lowest order, and puts them after the pair in terms of index ranking
+    leftOverArr.sort((a, b) => b - a);
+
+    cardIndexInUniqueCards.push(...leftOverArr);
+    console.log(cardIndexInUniqueCards);
+
+    // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
+    if (playerIndex == 0) {
+      playerRanks[0].playerOneHighCardRanks = cardIndexInUniqueCards;
+    } else if (playerIndex == 1) {
+      playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
+    }
+
     return true;
   } else {
     // console.log("Not a three of a kind!");
@@ -573,3 +613,4 @@ createAllCards(uniqueCards, suits);
 // console.log(checkTwoPair(["10S", "AD", "AS", "KH", "KC"]));
 // console.log(checkFullHouse(["QS", "QS", "2S", "2S", "2S"]));
 // console.log(checkTwoOfAKind(["KS", "10S", "5S", "KS", "9S"]));
+console.log(checkThreeOfAKind(["AS", "AS", "2S", "AS", "10S"]));
