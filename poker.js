@@ -86,6 +86,9 @@ const checkFlush = (playerCards, playerIndex) => {
 
   console.log("Flush! Suits are identical");
 
+  // Sorts the card rankings from highest to lowest
+  checkHighCard(playerCards, playerIndex);
+
   return true;
 };
 
@@ -110,6 +113,9 @@ const checkRoyalFlush = (playerCards, playerIndex) => {
         uniqueCardsRoyalTest.push(card.substr(0, 2));
       }
     });
+
+    // Sorts the card rankings from highest to lowest
+    checkHighCard(playerCards, playerIndex);
 
     return royalCards.every((i) => uniqueCardsRoyalTest.includes(i));
   }
@@ -148,12 +154,17 @@ const checkStraight = (playerCards, playerIndex) => {
 
   console.log("We have a straight!");
 
+  // Sorts the card rankings from highest to lowest
+  checkHighCard(playerCards, playerIndex);
+
   return true;
 };
 
 // Checks if player has a straight flush
 const checkStraightFlush = (playerCards, playerIndex) => {
   if (checkStraight(playerCards) && checkFlush(playerCards)) {
+    // Sorts the card rankings from highest to lowest
+    checkHighCard(playerCards, playerIndex);
     return true;
   } else {
     return false;
