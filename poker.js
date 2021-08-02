@@ -257,6 +257,39 @@ const checkFullHouse = (playerCards, playerIndex) => {
   if (checkThreeOfAKind(playerCards) && checkTwoOfAKind(playerCards)) {
     console.log("Full house: Three of a kind and a pair!");
 
+    // Update the player's high card index ranking:
+    const cardIndexInUniqueCards = [];
+
+    // Stores the three of a kind in an array
+    const threeArray = checkPair(playerCards).filter(
+      (card) => card.count == "3"
+    );
+
+    // Stores the two of a kind in an array
+    const twoArray = checkPair(playerCards).filter((card) => card.count == "2");
+
+    // Adds the rankings of the three of a kind to the new array, three times
+    for (let i = 0; i < 3; i++) {
+      cardIndexInUniqueCards.push(uniqueCards.indexOf(threeArray[0].card));
+    }
+    // Adds the rankings of the two of a kind (pair) to the new array, two times
+    for (let i = 0; i < 2; i++) {
+      cardIndexInUniqueCards.push(uniqueCards.indexOf(twoArray[0].card));
+    }
+
+    // console.log(`leftOverCards is ${leftOverCards}`);
+    // console.log(checkPair(playerCards)[0].card);
+    // console.log(checkPair(playerCards)[1].card);
+
+    console.log(cardIndexInUniqueCards);
+
+    // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
+    if (playerIndex == 0) {
+      playerRanks[0].playerOneHighCardRanks = cardIndexInUniqueCards;
+    } else if (playerIndex == 1) {
+      playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
+    }
+
     return true;
   } else {
     // console.log("Not a full house!");
@@ -272,6 +305,57 @@ const checkTwoPair = (playerCards, playerIndex) => {
     checkPair(playerCards)[1].count == "2"
   ) {
     console.log("Two pairs: Two different pairs!");
+
+    // Update the player's high card index ranking:
+    const cardIndexInUniqueCards = [];
+
+    // We want the rankings to appear twice in our ranking array for each pair, so that we have 5 ranks total to compare
+    for (let i = 0; i < 2; i++) {
+      cardIndexInUniqueCards.push(
+        uniqueCards.indexOf(checkPair(playerCards)[0].card)
+      );
+
+      cardIndexInUniqueCards.push(
+        uniqueCards.indexOf(checkPair(playerCards)[1].card)
+      );
+    }
+
+    // Checks for the left over card that isn't part of the two pairs,
+    // and puts it at the end of the ranking array
+    let leftOverCards = playerCards.filter((card) => {
+      return (
+        !card.includes(checkPair(playerCards)[0].card) &&
+        !card.includes(checkPair(playerCards)[1].card)
+      );
+    });
+
+    // Sort items in array in descending order
+    cardIndexInUniqueCards.sort((a, b) => b - a);
+
+    console.log(`leftOverCards is ${leftOverCards.toString().substr(0, 1)}`);
+
+    if (!leftOverCards.toString().includes("10")) {
+      cardIndexInUniqueCards.push(
+        uniqueCards.indexOf(leftOverCards.toString().substr(0, 1))
+      );
+    } else {
+      cardIndexInUniqueCards.push(
+        uniqueCards.indexOf(leftOverCards.toString().substr(0, 2))
+      );
+    }
+
+    // console.log(`leftOverCards is ${leftOverCards}`);
+    // console.log(checkPair(playerCards)[0].card);
+    // console.log(checkPair(playerCards)[1].card);
+
+    console.log(cardIndexInUniqueCards);
+
+    // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
+    if (playerIndex == 0) {
+      playerRanks[0].playerOneHighCardRanks = cardIndexInUniqueCards;
+    } else if (playerIndex == 1) {
+      playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
+    }
 
     return true;
   } else {
@@ -310,11 +394,12 @@ const checkHighCard = (playerCards, playerIndex) => {
 // It loops through an index of each player's cards ranked from highest to lowest order
 // until it finds who has the highest ranked card
 const checkTieBreaker = (playerOneCards, playerTwoCards) => {
-  const allPlayers = [playerOneCards, playerTwoCards];
-  allPlayers.forEach((playerCards, index) => {
-    let playerIndex = index;
-    checkHighCard(playerCards, playerIndex);
-  });
+  // const allPlayers = [playerOneCards, playerTwoCards];
+
+  // allPlayers.forEach((playerCards, index) => {
+  //   let playerIndex = index;
+  //   checkHighCard(playerCards, playerIndex);
+  // });
 
   // Determine which player has the highest card
 
@@ -350,6 +435,7 @@ const checkResults = (playerOneCards, playerTwoCards) => {
 
     if (checkRoyalFlush(playerCards, playerIndex)) {
       updatePlayerComboRank(playerIndex, 10);
+      // updatePlayerHighCardRanks(playerCards, playerIndex, comboType);
     } else if (checkStraightFlush(playerCards, playerIndex)) {
       updatePlayerComboRank(playerIndex, 9);
     } else if (checkFourOfAKind(playerCards, playerIndex)) {
@@ -441,4 +527,8 @@ const playGame = (numberOfGames) => {
 // playGame(100);
 
 // Test file
-playGame(array.length);
+// playGame(array.length);
+
+createAllCards(uniqueCards, suits);
+// console.log(checkTwoPair(["10S", "AD", "AS", "KH", "KC"]));
+// console.log(checkFullHouse(["QS", "QS", "2S", "2S", "2S"]));
