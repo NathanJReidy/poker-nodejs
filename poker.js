@@ -32,20 +32,6 @@ const uniqueCards = [
 ];
 const suits = ["D", "H", "S", "C"];
 const allCards = [];
-
-const comboRanks = [
-  "highCard",
-  "pair",
-  "twoPairs",
-  "threeOfAKind",
-  "straight",
-  "flush",
-  "fullHouse",
-  "fourOfAKind",
-  "straightFlush",
-  "royalFlush",
-];
-
 const playerRanks = [
   {
     playerOneComboRank: null,
@@ -56,7 +42,6 @@ const playerRanks = [
     playerTwoHighCardRanks: [],
   },
 ];
-
 const playerWins = [{ playerOneHandWins: 0 }, { playerTwoHandWins: 0 }];
 
 // Creates data for all possible card combinations and stores it in allCards
@@ -66,10 +51,6 @@ const createAllCards = (uniqueCards, suits) => {
       allCards.push(`${card}${suit}`);
     });
   });
-};
-
-const createHands = () => {
-  return;
 };
 
 // Checks if the player has the same suits for each card (i.e. a flush)
@@ -500,10 +481,13 @@ const checkHighCard = (playerCards, playerIndex) => {
 
   playerCards.forEach((card, index) => {
     // Match the specific card to its index in unique cards
-    if (!card.includes("10")) {
+
+    if (!card.toString().includes("10")) {
+      console.log(`card[0] is ${card[0]}`);
       cardIndexInUniqueCards.push(uniqueCards.indexOf(card[0]));
     } else {
       cardIndexInUniqueCards.push(uniqueCards.indexOf(card.substr(0, 2)));
+      onsole.log(`card[1] is ${card[1]}`);
     }
   });
   // Sort items in array in descending order
@@ -512,6 +496,10 @@ const checkHighCard = (playerCards, playerIndex) => {
   //   console.log(`maxIndex is ${maxIndex}`);
   let highCard = uniqueCards[maxIndex];
   //   console.log(`High card is ${highCard}`);
+
+  console.log(
+    `CHECKHIGHCARD: cardIndexInUniqueCards is ${cardIndexInUniqueCards}`
+  );
 
   // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
   if (playerIndex == 0) {
@@ -658,9 +646,9 @@ const playGame = (numberOfGames) => {
 // playGame(100);
 
 // Test file
-// playGame(array.length);
+playGame(array.length);
 
-createAllCards(uniqueCards, suits);
+// createAllCards(uniqueCards, suits);
 // console.log(checkTwoPair(["10S", "AD", "AS", "KH", "KC"]));
 // console.log(checkFullHouse(["QS", "QS", "2S", "2S", "2S"]));
 // console.log(checkTwoOfAKind(["KS", "10S", "5S", "KS", "9S"]));
