@@ -1,6 +1,4 @@
-const readline = require("readline");
 const fs = require("fs");
-const { parse } = require("path");
 const {
   array,
   checkRoyalFlush,
@@ -22,29 +20,9 @@ const {
   playerWins,
 } = require("./checkHandResults.js");
 
-const checkTieBreaker = (playerOneCards, playerTwoCards) => {
-  for (let i = 0; i < 5; i++) {
-    if (
-      playerRanks[0].playerOneHighCardRanks[i] >
-      playerRanks[1].playerTwoHighCardRanks[i]
-    ) {
-      // Player 1 wins in a tie break, with the highest ranking card
-      playerWins[0].playerOneHandWins += 1;
-      break;
-    } else if (
-      playerRanks[0].playerOneHighCardRanks[i] <
-      playerRanks[1].playerTwoHighCardRanks[i]
-    ) {
-      // Player 2 wins in a tie break, with the highest ranking card
-      playerWins[1].playerTwoHandWins += 1;
-      break;
-    }
-  }
-};
-
+// Check what type of hand each player has and update their combination rank (their best type of hand)
+// playerOneCards and playerTwoCards are each an array of five randomly selected cards
 const checkHands = (playerOneCards, playerTwoCards) => {
-  // playerOneCards and playerTwoCards are each an array of 5 randomly selected cards
-  // check results of player one's cards
   const allPlayers = [playerOneCards, playerTwoCards];
 
   allPlayers.forEach((playerCards, index) => {
@@ -73,8 +51,28 @@ const checkHands = (playerOneCards, playerTwoCards) => {
       updatePlayerComboRank(playerIndex, 1);
     }
   });
+};
 
-  // Check winner and add one to handWinCount for the winner
+// If the players have the exact same type of combination rank (e.g. both have a pair of 5's, both have flushes, etc),
+// then check to see who has the highest ranking card
+const checkTieBreaker = (playerOneCards, playerTwoCards) => {
+  for (let i = 0; i < 5; i++) {
+    if (
+      playerRanks[0].playerOneHighCardRanks[i] >
+      playerRanks[1].playerTwoHighCardRanks[i]
+    ) {
+      // Player 1 wins in a tie break, with the highest ranking card
+      playerWins[0].playerOneHandWins += 1;
+      break;
+    } else if (
+      playerRanks[0].playerOneHighCardRanks[i] <
+      playerRanks[1].playerTwoHighCardRanks[i]
+    ) {
+      // Player 2 wins in a tie break, with the highest ranking card
+      playerWins[1].playerTwoHandWins += 1;
+      break;
+    }
+  }
 };
 
 // Check who the winner of the game is, first based on combination rank,
@@ -97,9 +95,12 @@ const checkWinner = (playerOneCards, playerTwoCards) => {
   }
 };
 
+// Run the game and see who wins
 const playGame = (numberOfGames, runTest = false) => {
+  // Create the card deck (52 cards)
   createAllCards(uniqueCards, suits);
 
+  // Run the game numberOfGames times
   for (let i = 0; i < numberOfGames; i++) {
     let playerOneCardsArray = [];
     let playerTwoCardsArray = [];
@@ -134,6 +135,8 @@ const playGame = (numberOfGames, runTest = false) => {
 
     checkHands(playerOneCardsArray, playerTwoCardsArray);
     checkWinner(playerOneCardsArray, playerTwoCardsArray);
+
+    // Return the winner and the number of games each player won
     if (i === numberOfGames - 1) {
       console.log(
         `Player 1: ${playerWins[0].playerOneHandWins}, Player 2: ${playerWins[1].playerTwoHandWins}`

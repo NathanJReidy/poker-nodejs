@@ -1,24 +1,8 @@
-const readline = require("readline");
 const fs = require("fs");
-const { parse } = require("path");
-// const { playerRanks } = require("./checkResults.js");
 
-// const readInterface = readline.createInterface({
-//   input: fs.createReadStream("./poker-hands.txt"),
-//   output: process.stdout,
-//   console: false,
-// });
-
-// readInterface.on("line", (line) => console.log(line));
-
-// for (let i in array) {
-//   console.log(array[i]);
-// }
-
-// console.log(array);
-
-// Test file
+// Test file array
 let array = fs.readFileSync("./poker-hands.txt").toString().split("\n");
+// Stores the deck of cards (52 cards)
 const allCards = [];
 const uniqueCards = [
   "2",
@@ -49,7 +33,7 @@ const playerRanks = [
 const suits = ["D", "H", "S", "C"];
 const playerWins = [{ playerOneHandWins: 0 }, { playerTwoHandWins: 0 }];
 
-// Creates data for all possible card combinations and stores it in allCards
+// Creates data for all possible card combinations (a standard deck of 52 cards) and stores it in allCards
 const createAllCards = (uniqueCards, suits) => {
   uniqueCards.map((card) => {
     suits.map((suit) => {
@@ -76,7 +60,8 @@ const checkFlush = (playerCards, playerIndex) => {
   return true;
 };
 
-// Updates the player's best rank based on their cards
+// Updates the player's best combination rank based on their cards
+// (a combination rank is the rank of your hand type, eg flush, straight, pair, etc)
 const updatePlayerComboRank = (playerIndex, playerComboRank) => {
   if (playerIndex == 0) {
     playerRanks[0].playerOneComboRank = playerComboRank;
@@ -105,7 +90,7 @@ const checkRoyalFlush = (playerCards, playerIndex) => {
 
 // Checks if the player has a straight
 const checkStraight = (playerCards, playerIndex) => {
-  // We want to find each card in our uniqueCards array and see if their indexes are consecutive
+  // We want to find each of the player's cards in our uniqueCards array and see if their indexes are consecutive
   const cardsRankIndexArray = [];
   playerCards.forEach((card, index) => {
     // Match the specific card to its index in unique cards
@@ -151,14 +136,14 @@ const checkCardFrequency = (playerCards, playerIndex) => {
   const cardsRankIndexArray = [];
   let cardsArrayForMultipleCounts = [];
   playerCards.forEach((card, index) => {
-    // Match the specific card to its index in unique cards
+    // Match the player's specific card to its index in unique cards
     cardsRankIndexArray.push(uniqueCards.indexOf(card.substr(0, 1)));
   });
   // Sort items in array in ascending order
   cardsRankIndexArray.sort((a, b) => a - b);
 
   // If the difference between the items in the cardsRankIndexArray array is 0, for the item index compared to the next item index,
-  // then we have a card that occurs more than once
+  // then we have a card that occurs more than once, and we will store this in cardsArrayForMultipleCounts
   for (let i = 0; i < cardsRankIndexArray.length - 1; i++) {
     let newArr = cardsArrayForMultipleCounts.filter(
       (obj) => obj.card == uniqueCards[cardsRankIndexArray[i]]
@@ -198,7 +183,7 @@ const checkFourOfAKind = (playerCards, playerIndex) => {
     // Update the player's high card index ranking:
     const cardsRankIndexArray = [];
 
-    // Adds the rankings of the three of a kind to the new array, three times
+    // Adds the rankings of the four of a kind to the new array, four times
     for (let i = 0; i < 4; i++) {
       cardsRankIndexArray.push(uniqueCards.indexOf(fourArray[0].card));
     }
@@ -218,7 +203,7 @@ const checkFourOfAKind = (playerCards, playerIndex) => {
         leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 1)));
       });
 
-    // Sorts left over cards from highest to lowest order, and puts them after the pair in terms of index ranking
+    // Sorts left over cards from highest to lowest order, and puts them after the four of a kind in terms of index ranking
     leftOverArr.sort((a, b) => b - a);
 
     cardsRankIndexArray.push(...leftOverArr);
@@ -247,7 +232,7 @@ const checkThreeOfAKind = (playerCards, playerIndex) => {
       cardsRankIndexArray.push(uniqueCards.indexOf(threeArray[0].card));
     }
 
-    // Checks for the left over cards that aren't part of the two pair
+    // Checks for the left over cards that aren't part of the three of a kind
     // and puts them at the end of the ranking array in highest to lowest order
     let leftOverCards = playerCards.filter((card) => {
       return !card.includes(threeArray[0].card);
@@ -262,7 +247,7 @@ const checkThreeOfAKind = (playerCards, playerIndex) => {
         leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 1)));
       });
 
-    // Sorts left over cards from highest to lowest order, and puts them after the pair in terms of index ranking
+    // Sorts left over cards from highest to lowest order, and puts them after the three of a kind in terms of index ranking
     leftOverArr.sort((a, b) => b - a);
 
     cardsRankIndexArray.push(...leftOverArr);
@@ -290,7 +275,7 @@ const checkTwoOfAKind = (playerCards, playerIndex) => {
       cardsRankIndexArray.push(uniqueCards.indexOf(twoArray[0].card));
     }
 
-    // Checks for the left over cards that aren't part of the two pair
+    // Checks for the left over cards that aren't part of the pair
     // and puts them at the end of the ranking array in highest to lowest order
     let leftOverCards = playerCards.filter((card) => {
       return !card.includes(twoArray[0].card);
@@ -404,7 +389,7 @@ const updateHighCardsRankDescending = (playerCards, playerIndex) => {
   const cardsRankIndexArray = [];
 
   playerCards.forEach((card, index) => {
-    // Match the specific card to its index in unique cards
+    // Match the player's specific card to its index in unique cards
     cardsRankIndexArray.push(uniqueCards.indexOf(card[0]));
   });
   // Sort items in array in descending order
