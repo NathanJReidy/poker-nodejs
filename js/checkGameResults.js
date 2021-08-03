@@ -1,6 +1,6 @@
 const fs = require("fs");
 const {
-  array,
+  testFileArray,
   checkRoyalFlush,
   checkStraightFlush,
   checkFourOfAKind,
@@ -128,7 +128,7 @@ const playGame = (numberOfGames, runTest = false) => {
       );
     } else if (runTest === true) {
       // Test file data
-      const newArr = array[i].split(" ");
+      const newArr = testFileArray[i].split(" ");
       playerOneCardsArray = newArr.slice(0, 5);
       playerTwoCardsArray = newArr.slice(5, 10);
     }
@@ -146,7 +146,7 @@ const playGame = (numberOfGames, runTest = false) => {
 };
 
 module.exports = {
-  array,
+  testFileArray,
   checkTieBreaker,
   checkHands,
   checkWinner,

@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 // Test file array
-let array = fs.readFileSync("./poker-hands.txt").toString().split("\n");
+let testFileArray = fs.readFileSync("./poker-hands.txt").toString().split("\n");
 // Stores the deck of cards (52 cards)
 const allCards = [];
 const uniqueCards = [
@@ -409,7 +409,7 @@ const updateCardsRank = (playerIndex, cardsRankIndexArray) => {
 };
 
 module.exports = {
-  array,
+  testFileArray,
   checkRoyalFlush,
   checkStraightFlush,
   checkFourOfAKind,
