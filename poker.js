@@ -102,20 +102,20 @@ const checkRoyalFlush = (playerCards, playerIndex) => {
 // Checks if the player has a straight
 const checkStraight = (playerCards, playerIndex) => {
   // We want to find each card in our uniqueCards array and see if their indexes are consecutive
-  const cardIndexInUniqueCards = [];
+  const cardsRankIndexArray = [];
   playerCards.forEach((card, index) => {
     // Match the specific card to its index in unique cards
-    cardIndexInUniqueCards.push(uniqueCards.indexOf(card[0]));
+    cardsRankIndexArray.push(uniqueCards.indexOf(card[0]));
   });
   // Sort items in array in ascending order
-  cardIndexInUniqueCards.sort((a, b) => a - b);
+  cardsRankIndexArray.sort((a, b) => a - b);
 
   // If the difference between the items in the array is 1, for every item,
   // then we have a straight
-  for (let i = 0; i < cardIndexInUniqueCards.length - 1; i++) {
+  for (let i = 0; i < cardsRankIndexArray.length - 1; i++) {
     if (
-      parseInt(cardIndexInUniqueCards[i + 1]) -
-        parseInt(cardIndexInUniqueCards[i]) !==
+      parseInt(cardsRankIndexArray[i + 1]) -
+        parseInt(cardsRankIndexArray[i]) !==
       1
     ) {
       return false;
@@ -140,62 +140,63 @@ const checkStraightFlush = (playerCards, playerIndex) => {
   }
 };
 
-// CHECKS THE FREQUENCY OF CARDS, FOR ANY CARDS THAT APPEAR 2 OR MORE TIMES, AND STORES THEM IN AN ARRAY OF OBJECT/S
-const checkPair = (playerCards, playerIndex) => {
-  // We want to find each card in our uniqueCards array and see if the differences between their indexes is 0
-  const cardIndexInUniqueCards = [];
-  let pairValues = [];
+// Any cards that appear more than once are stored as a singular object with
+// properties 'card' (displays card type only, not suit) and 'count' (number of times that card appears in the player's hand),
+// and these objects, if they exist, are stored and returned in an array
+const checkCardFrequency = (playerCards, playerIndex) => {
+  const cardsRankIndexArray = [];
+  let cardsArrayForMultipleCounts = [];
   playerCards.forEach((card, index) => {
     // Match the specific card to its index in unique cards
-    cardIndexInUniqueCards.push(uniqueCards.indexOf(card.substr(0, 1)));
+    cardsRankIndexArray.push(uniqueCards.indexOf(card.substr(0, 1)));
   });
   // Sort items in array in ascending order
-  cardIndexInUniqueCards.sort((a, b) => a - b);
+  cardsRankIndexArray.sort((a, b) => a - b);
 
-  // If the difference between the items in the array is 0, for every item,
-  // then we have a duplicate
-  for (let i = 0; i < cardIndexInUniqueCards.length - 1; i++) {
-    let newArr = pairValues.filter(
-      (obj) => obj.card == uniqueCards[cardIndexInUniqueCards[i]]
+  // If the difference between the items in the cardsRankIndexArray array is 0, for the item index compared to the next item index,
+  // then we have a card that occurs more than once
+  for (let i = 0; i < cardsRankIndexArray.length - 1; i++) {
+    let newArr = cardsArrayForMultipleCounts.filter(
+      (obj) => obj.card == uniqueCards[cardsRankIndexArray[i]]
     );
 
     if (
-      parseInt(cardIndexInUniqueCards[i + 1]) -
-        parseInt(cardIndexInUniqueCards[i]) ==
+      parseInt(cardsRankIndexArray[i + 1]) - parseInt(cardsRankIndexArray[i]) ==
         0 &&
       newArr.length == 0
     ) {
-      pairValues.push({
-        card: uniqueCards[cardIndexInUniqueCards[i]],
+      cardsArrayForMultipleCounts.push({
+        card: uniqueCards[cardsRankIndexArray[i]],
         count: 2,
       });
     }
 
     if (
-      parseInt(cardIndexInUniqueCards[i + 1]) -
-        parseInt(cardIndexInUniqueCards[i]) ==
+      parseInt(cardsRankIndexArray[i + 1]) - parseInt(cardsRankIndexArray[i]) ==
         0 &&
       newArr.length !== 0
     ) {
       newArr[0].count += 1;
 
-      pairValues = [...pairValues];
+      cardsArrayForMultipleCounts = [...cardsArrayForMultipleCounts];
     }
   }
-  return pairValues;
+  return cardsArrayForMultipleCounts;
 };
 
 // Checks if the player has a four of a kind
 const checkFourOfAKind = (playerCards, playerIndex) => {
-  let fourArray = checkPair(playerCards).filter((card) => card.count == "4");
+  let fourArray = checkCardFrequency(playerCards).filter(
+    (card) => card.count == "4"
+  );
 
   if (fourArray.length == 1 && fourArray[0].count == "4") {
     // Update the player's high card index ranking:
-    const cardIndexInUniqueCards = [];
+    const cardsRankIndexArray = [];
 
     // Adds the rankings of the three of a kind to the new array, three times
     for (let i = 0; i < 4; i++) {
-      cardIndexInUniqueCards.push(uniqueCards.indexOf(fourArray[0].card));
+      cardsRankIndexArray.push(uniqueCards.indexOf(fourArray[0].card));
     }
 
     // Checks for the left over cards that aren't part of the four of a kind
@@ -216,13 +217,13 @@ const checkFourOfAKind = (playerCards, playerIndex) => {
     // Sorts left over cards from highest to lowest order, and puts them after the pair in terms of index ranking
     leftOverArr.sort((a, b) => b - a);
 
-    cardIndexInUniqueCards.push(...leftOverArr);
+    cardsRankIndexArray.push(...leftOverArr);
 
     // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
     if (playerIndex == 0) {
-      playerRanks[0].playerOneHighCardRanks = cardIndexInUniqueCards;
+      playerRanks[0].playerOneHighCardRanks = cardsRankIndexArray;
     } else if (playerIndex == 1) {
-      playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
+      playerRanks[1].playerTwoHighCardRanks = cardsRankIndexArray;
     }
 
     // If four of a kind, return true
@@ -234,15 +235,17 @@ const checkFourOfAKind = (playerCards, playerIndex) => {
 
 // Checks if the player has a three of a kind
 const checkThreeOfAKind = (playerCards, playerIndex) => {
-  let threeArray = checkPair(playerCards).filter((card) => card.count == "3");
+  let threeArray = checkCardFrequency(playerCards).filter(
+    (card) => card.count == "3"
+  );
 
   if (threeArray.length == 1 && threeArray[0].count == "3") {
     // Update the player's high card index ranking:
-    const cardIndexInUniqueCards = [];
+    const cardsRankIndexArray = [];
 
     // Adds the rankings of the three of a kind to the new array, three times
     for (let i = 0; i < 3; i++) {
-      cardIndexInUniqueCards.push(uniqueCards.indexOf(threeArray[0].card));
+      cardsRankIndexArray.push(uniqueCards.indexOf(threeArray[0].card));
     }
 
     // Checks for the left over cards that aren't part of the two pair
@@ -263,13 +266,13 @@ const checkThreeOfAKind = (playerCards, playerIndex) => {
     // Sorts left over cards from highest to lowest order, and puts them after the pair in terms of index ranking
     leftOverArr.sort((a, b) => b - a);
 
-    cardIndexInUniqueCards.push(...leftOverArr);
+    cardsRankIndexArray.push(...leftOverArr);
 
     // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
     if (playerIndex == 0) {
-      playerRanks[0].playerOneHighCardRanks = cardIndexInUniqueCards;
+      playerRanks[0].playerOneHighCardRanks = cardsRankIndexArray;
     } else if (playerIndex == 1) {
-      playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
+      playerRanks[1].playerTwoHighCardRanks = cardsRankIndexArray;
     }
 
     // If three of a kind, return true
@@ -281,14 +284,16 @@ const checkThreeOfAKind = (playerCards, playerIndex) => {
 
 // Checks if the player has a two of a kind (pair)
 const checkTwoOfAKind = (playerCards, playerIndex) => {
-  let twoArray = checkPair(playerCards).filter((card) => card.count == "2");
+  let twoArray = checkCardFrequency(playerCards).filter(
+    (card) => card.count == "2"
+  );
   if (twoArray.length == 1 && twoArray[0].count == "2") {
     // Update the player's high card index ranking:
-    const cardIndexInUniqueCards = [];
+    const cardsRankIndexArray = [];
 
     // Adds the rankings of the two of a kind (pair) to the new array, two times
     for (let i = 0; i < 2; i++) {
-      cardIndexInUniqueCards.push(uniqueCards.indexOf(twoArray[0].card));
+      cardsRankIndexArray.push(uniqueCards.indexOf(twoArray[0].card));
     }
 
     // Checks for the left over cards that aren't part of the two pair
@@ -309,12 +314,12 @@ const checkTwoOfAKind = (playerCards, playerIndex) => {
     // Sorts left over cards from highest to lowest order, and puts them after the pair in terms of index ranking
     leftOverArr.sort((a, b) => b - a);
 
-    cardIndexInUniqueCards.push(...leftOverArr);
+    cardsRankIndexArray.push(...leftOverArr);
     // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
     if (playerIndex == 0) {
-      playerRanks[0].playerOneHighCardRanks = cardIndexInUniqueCards;
+      playerRanks[0].playerOneHighCardRanks = cardsRankIndexArray;
     } else if (playerIndex == 1) {
-      playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
+      playerRanks[1].playerTwoHighCardRanks = cardsRankIndexArray;
     }
 
     // If two of a kind (pair), return true
@@ -328,30 +333,32 @@ const checkTwoOfAKind = (playerCards, playerIndex) => {
 const checkFullHouse = (playerCards, playerIndex) => {
   if (checkThreeOfAKind(playerCards) && checkTwoOfAKind(playerCards)) {
     // Update the player's high card index ranking:
-    const cardIndexInUniqueCards = [];
+    const cardsRankIndexArray = [];
 
     // Stores the three of a kind in an array
-    const threeArray = checkPair(playerCards).filter(
+    const threeArray = checkCardFrequency(playerCards).filter(
       (card) => card.count == "3"
     );
 
     // Stores the two of a kind in an array
-    const twoArray = checkPair(playerCards).filter((card) => card.count == "2");
+    const twoArray = checkCardFrequency(playerCards).filter(
+      (card) => card.count == "2"
+    );
 
     // Adds the rankings of the three of a kind to the new array, three times
     for (let i = 0; i < 3; i++) {
-      cardIndexInUniqueCards.push(uniqueCards.indexOf(threeArray[0].card));
+      cardsRankIndexArray.push(uniqueCards.indexOf(threeArray[0].card));
     }
     // Adds the rankings of the two of a kind (pair) to the new array, two times
     for (let i = 0; i < 2; i++) {
-      cardIndexInUniqueCards.push(uniqueCards.indexOf(twoArray[0].card));
+      cardsRankIndexArray.push(uniqueCards.indexOf(twoArray[0].card));
     }
 
     // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
     if (playerIndex == 0) {
-      playerRanks[0].playerOneHighCardRanks = cardIndexInUniqueCards;
+      playerRanks[0].playerOneHighCardRanks = cardsRankIndexArray;
     } else if (playerIndex == 1) {
-      playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
+      playerRanks[1].playerTwoHighCardRanks = cardsRankIndexArray;
     }
 
     // If full house (three of a kind and a pair), return true
@@ -364,21 +371,21 @@ const checkFullHouse = (playerCards, playerIndex) => {
 // Checks if the player has a two pair: Two different pairs
 const checkTwoPair = (playerCards, playerIndex) => {
   if (
-    checkPair(playerCards).length == 2 &&
-    checkPair(playerCards)[0].count == "2" &&
-    checkPair(playerCards)[1].count == "2"
+    checkCardFrequency(playerCards).length == 2 &&
+    checkCardFrequency(playerCards)[0].count == "2" &&
+    checkCardFrequency(playerCards)[1].count == "2"
   ) {
     // Update the player's high card index ranking:
-    const cardIndexInUniqueCards = [];
+    const cardsRankIndexArray = [];
 
     // We want the rankings to appear twice in our ranking array for each pair, so that we have 5 ranks total to compare
     for (let i = 0; i < 2; i++) {
-      cardIndexInUniqueCards.push(
-        uniqueCards.indexOf(checkPair(playerCards)[0].card)
+      cardsRankIndexArray.push(
+        uniqueCards.indexOf(checkCardFrequency(playerCards)[0].card)
       );
 
-      cardIndexInUniqueCards.push(
-        uniqueCards.indexOf(checkPair(playerCards)[1].card)
+      cardsRankIndexArray.push(
+        uniqueCards.indexOf(checkCardFrequency(playerCards)[1].card)
       );
     }
 
@@ -386,23 +393,23 @@ const checkTwoPair = (playerCards, playerIndex) => {
     // and puts it at the end of the ranking array
     let leftOverCards = playerCards.filter((card) => {
       return (
-        !card.includes(checkPair(playerCards)[0].card) &&
-        !card.includes(checkPair(playerCards)[1].card)
+        !card.includes(checkCardFrequency(playerCards)[0].card) &&
+        !card.includes(checkCardFrequency(playerCards)[1].card)
       );
     });
 
     // Sort items in array in descending order
-    cardIndexInUniqueCards.sort((a, b) => b - a);
+    cardsRankIndexArray.sort((a, b) => b - a);
 
-    cardIndexInUniqueCards.push(
+    cardsRankIndexArray.push(
       uniqueCards.indexOf(leftOverCards.toString().substr(0, 1))
     );
 
     // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
     if (playerIndex == 0) {
-      playerRanks[0].playerOneHighCardRanks = cardIndexInUniqueCards;
+      playerRanks[0].playerOneHighCardRanks = cardsRankIndexArray;
     } else if (playerIndex == 1) {
-      playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
+      playerRanks[1].playerTwoHighCardRanks = cardsRankIndexArray;
     }
 
     // If two different pairs, return true
@@ -413,20 +420,25 @@ const checkTwoPair = (playerCards, playerIndex) => {
 };
 
 const checkHighCard = (playerCards, playerIndex) => {
-  const cardIndexInUniqueCards = [];
+  const cardsRankIndexArray = [];
 
   playerCards.forEach((card, index) => {
     // Match the specific card to its index in unique cards
-    cardIndexInUniqueCards.push(uniqueCards.indexOf(card[0]));
+    cardsRankIndexArray.push(uniqueCards.indexOf(card[0]));
   });
   // Sort items in array in descending order
-  cardIndexInUniqueCards.sort((a, b) => b - a);
+  cardsRankIndexArray.sort((a, b) => b - a);
 
-  // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
+  updateCardsRank(playerIndex, cardsRankIndexArray);
+};
+
+// Stores the index ranks of each player's cards in an array of
+// highest indexed cards to lowest indexed cards, for each player
+const updateCardsRank = (playerIndex, cardsRankIndexArray) => {
   if (playerIndex == 0) {
-    playerRanks[0].playerOneHighCardRanks = cardIndexInUniqueCards;
+    playerRanks[0].playerOneHighCardRanks = cardsRankIndexArray;
   } else if (playerIndex == 1) {
-    playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
+    playerRanks[1].playerTwoHighCardRanks = cardsRankIndexArray;
   }
 };
 
@@ -453,12 +465,11 @@ const checkTieBreaker = (playerOneCards, playerTwoCards) => {
   }
 };
 
-const checkResults = (playerOneCards, playerTwoCards) => {
+const checkHands = (playerOneCards, playerTwoCards) => {
   // playerOneCards and playerTwoCards are each an array of 5 randomly selected cards
   // check results of player one's cards
   const allPlayers = [playerOneCards, playerTwoCards];
 
-  // NEED TO PASS IN INDEX
   allPlayers.forEach((playerCards, index) => {
     let playerIndex = index;
 
@@ -490,6 +501,9 @@ const checkResults = (playerOneCards, playerTwoCards) => {
   // Check winner and add one to handWinCount for the winner
 };
 
+// Check who the winner of the game is, first based on combination rank,
+// but if there is a combination rank tie, then checkTieBreaker is called,
+// which assesses which player has the better hand based on highest to lowest card rank
 const checkWinner = (playerOneCards, playerTwoCards) => {
   if (playerRanks[0].playerOneComboRank > playerRanks[1].playerTwoComboRank) {
     // PLayer 1 wins, based on combination rank alone
@@ -529,7 +543,7 @@ const playGame = (numberOfGames) => {
     playerOneCardsArray = newArr.slice(0, 5);
     playerTwoCardsArray = newArr.slice(5, 10);
 
-    checkResults(playerOneCardsArray, playerTwoCardsArray);
+    checkHands(playerOneCardsArray, playerTwoCardsArray);
     checkWinner(playerOneCardsArray, playerTwoCardsArray);
     if (i === numberOfGames - 1) {
       console.log(
