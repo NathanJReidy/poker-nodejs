@@ -138,7 +138,7 @@ const playGame = (numberOfGames, runTest = false) => {
 
     // Return the winner and the number of games each player won
     if (i === numberOfGames - 1) {
-      console.log(
+      process.stdout.write(
         `Player 1: ${playerWins[0].playerOneHandWins}, Player 2: ${playerWins[1].playerTwoHandWins}`
       );
     }
