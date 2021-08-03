@@ -1,3 +1,5 @@
+# Instructions to Run
+
 1. Install node.js if you don't already have it: docs.npmjs.com/downloading-and-installing-node-js-and-npm
 2. `git clone git@github.com:NathanJReidy/poker-nodejs.git`
 3. Navigate to the cloned directory from your command line
