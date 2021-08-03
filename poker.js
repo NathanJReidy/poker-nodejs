@@ -1,21 +1,3 @@
-const readline = require("readline");
-const fs = require("fs");
-
-// const readInterface = readline.createInterface({
-//   input: fs.createReadStream("./poker-hands.txt"),
-//   output: process.stdout,
-//   console: false,
-// });
-
-// readInterface.on("line", (line) => console.log(line));
-
-let array = fs.readFileSync("./poker-hands.txt").toString().split("\n");
-// for (let i in array) {
-//   console.log(array[i]);
-// }
-
-// console.log(array);
-
 const uniqueCards = [
   "2",
   "3",
@@ -45,6 +27,26 @@ const playerRanks = [
 ];
 const playerWins = [{ playerOneHandWins: 0 }, { playerTwoHandWins: 0 }];
 
+const readline = require("readline");
+const fs = require("fs");
+
+// const readInterface = readline.createInterface({
+//   input: fs.createReadStream("./poker-hands.txt"),
+//   output: process.stdout,
+//   console: false,
+// });
+
+// readInterface.on("line", (line) => console.log(line));
+
+let array = fs.readFileSync("./poker-hands.txt").toString().split("\n");
+// for (let i in array) {
+//   console.log(array[i]);
+// }
+
+// console.log(array);
+
+// Test file
+
 // Creates data for all possible card combinations and stores it in allCards
 const createAllCards = (uniqueCards, suits) => {
   uniqueCards.map((card) => {
@@ -66,7 +68,7 @@ const checkFlush = (playerCards, playerIndex) => {
   }
 
   // Sorts the card rankings from highest to lowest
-  checkHighCard(playerCards, playerIndex);
+  updateHighCardsRankDescending(playerCards, playerIndex);
 
   // If suits are identical (flush), return true
   return true;
@@ -91,7 +93,7 @@ const checkRoyalFlush = (playerCards, playerIndex) => {
     });
 
     // Sorts the card rankings from highest to lowest
-    checkHighCard(playerCards, playerIndex);
+    updateHighCardsRankDescending(playerCards, playerIndex);
 
     return royalCards.every((i) => uniqueCardsRoyalTest.includes(i));
   }
@@ -123,7 +125,7 @@ const checkStraight = (playerCards, playerIndex) => {
   }
 
   // Sorts the card rankings from highest to lowest
-  checkHighCard(playerCards, playerIndex);
+  updateHighCardsRankDescending(playerCards, playerIndex);
 
   // If straight, return true
   return true;
@@ -133,7 +135,7 @@ const checkStraight = (playerCards, playerIndex) => {
 const checkStraightFlush = (playerCards, playerIndex) => {
   if (checkStraight(playerCards) && checkFlush(playerCards)) {
     // Sorts the card rankings from highest to lowest
-    checkHighCard(playerCards, playerIndex);
+    updateHighCardsRankDescending(playerCards, playerIndex);
     return true;
   } else {
     return false;
@@ -219,12 +221,7 @@ const checkFourOfAKind = (playerCards, playerIndex) => {
 
     cardsRankIndexArray.push(...leftOverArr);
 
-    // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
-    if (playerIndex == 0) {
-      playerRanks[0].playerOneHighCardRanks = cardsRankIndexArray;
-    } else if (playerIndex == 1) {
-      playerRanks[1].playerTwoHighCardRanks = cardsRankIndexArray;
-    }
+    updateCardsRank(playerIndex, cardsRankIndexArray);
 
     // If four of a kind, return true
     return true;
@@ -268,12 +265,7 @@ const checkThreeOfAKind = (playerCards, playerIndex) => {
 
     cardsRankIndexArray.push(...leftOverArr);
 
-    // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
-    if (playerIndex == 0) {
-      playerRanks[0].playerOneHighCardRanks = cardsRankIndexArray;
-    } else if (playerIndex == 1) {
-      playerRanks[1].playerTwoHighCardRanks = cardsRankIndexArray;
-    }
+    updateCardsRank(playerIndex, cardsRankIndexArray);
 
     // If three of a kind, return true
     return true;
@@ -315,12 +307,8 @@ const checkTwoOfAKind = (playerCards, playerIndex) => {
     leftOverArr.sort((a, b) => b - a);
 
     cardsRankIndexArray.push(...leftOverArr);
-    // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
-    if (playerIndex == 0) {
-      playerRanks[0].playerOneHighCardRanks = cardsRankIndexArray;
-    } else if (playerIndex == 1) {
-      playerRanks[1].playerTwoHighCardRanks = cardsRankIndexArray;
-    }
+
+    updateCardsRank(playerIndex, cardsRankIndexArray);
 
     // If two of a kind (pair), return true
     return true;
@@ -354,12 +342,7 @@ const checkFullHouse = (playerCards, playerIndex) => {
       cardsRankIndexArray.push(uniqueCards.indexOf(twoArray[0].card));
     }
 
-    // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
-    if (playerIndex == 0) {
-      playerRanks[0].playerOneHighCardRanks = cardsRankIndexArray;
-    } else if (playerIndex == 1) {
-      playerRanks[1].playerTwoHighCardRanks = cardsRankIndexArray;
-    }
+    updateCardsRank(playerIndex, cardsRankIndexArray);
 
     // If full house (three of a kind and a pair), return true
     return true;
@@ -405,12 +388,7 @@ const checkTwoPair = (playerCards, playerIndex) => {
       uniqueCards.indexOf(leftOverCards.toString().substr(0, 1))
     );
 
-    // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
-    if (playerIndex == 0) {
-      playerRanks[0].playerOneHighCardRanks = cardsRankIndexArray;
-    } else if (playerIndex == 1) {
-      playerRanks[1].playerTwoHighCardRanks = cardsRankIndexArray;
-    }
+    updateCardsRank(playerIndex, cardsRankIndexArray);
 
     // If two different pairs, return true
     return true;
@@ -419,7 +397,8 @@ const checkTwoPair = (playerCards, playerIndex) => {
   }
 };
 
-const checkHighCard = (playerCards, playerIndex) => {
+// Updates the ranking of the high cards by first sorting them in descending order.
+const updateHighCardsRankDescending = (playerCards, playerIndex) => {
   const cardsRankIndexArray = [];
 
   playerCards.forEach((card, index) => {
@@ -475,7 +454,6 @@ const checkHands = (playerOneCards, playerTwoCards) => {
 
     if (checkRoyalFlush(playerCards, playerIndex)) {
       updatePlayerComboRank(playerIndex, 10);
-      // updatePlayerHighCardRanks(playerCards, playerIndex, comboType);
     } else if (checkStraightFlush(playerCards, playerIndex)) {
       updatePlayerComboRank(playerIndex, 9);
     } else if (checkFourOfAKind(playerCards, playerIndex)) {
@@ -493,7 +471,7 @@ const checkHands = (playerOneCards, playerTwoCards) => {
     } else if (checkTwoOfAKind(playerCards, playerIndex)) {
       updatePlayerComboRank(playerIndex, 2);
     } else {
-      checkHighCard(playerCards, playerIndex);
+      updateHighCardsRankDescending(playerCards, playerIndex);
       updatePlayerComboRank(playerIndex, 1);
     }
   });
@@ -521,27 +499,29 @@ const checkWinner = (playerOneCards, playerTwoCards) => {
   }
 };
 
-const playGame = (numberOfGames) => {
+const playGame = (numberOfGames, runTest = false) => {
   createAllCards(uniqueCards, suits);
 
   for (let i = 0; i < numberOfGames; i++) {
     let playerOneCardsArray = [];
     let playerTwoCardsArray = [];
 
-    // Randomly allocates 5 cards to each player
-    // for (let i = 0; i < 5; i++) {
-    //   playerOneCardsArray.push(
-    //     allCards[Math.floor(Math.random() * allCards.length)]
-    //   );
-    //   playerTwoCardsArray.push(
-    //     allCards[Math.floor(Math.random() * allCards.length)]
-    //   );
-    // }
-
-    // Test file data
-    const newArr = array[i].split(" ");
-    playerOneCardsArray = newArr.slice(0, 5);
-    playerTwoCardsArray = newArr.slice(5, 10);
+    if (runTest === false) {
+      // Randomly allocates 5 cards to each player
+      for (let i = 0; i < 5; i++) {
+        playerOneCardsArray.push(
+          allCards[Math.floor(Math.random() * allCards.length)]
+        );
+        playerTwoCardsArray.push(
+          allCards[Math.floor(Math.random() * allCards.length)]
+        );
+      }
+    } else if (runTest === true) {
+      // Test file data
+      const newArr = array[i].split(" ");
+      playerOneCardsArray = newArr.slice(0, 5);
+      playerTwoCardsArray = newArr.slice(5, 10);
+    }
 
     checkHands(playerOneCardsArray, playerTwoCardsArray);
     checkWinner(playerOneCardsArray, playerTwoCardsArray);
@@ -553,8 +533,4 @@ const playGame = (numberOfGames) => {
   }
 };
 
-// Play game 100 times
-// playGame(100);
-
-// Test file
-playGame(array.length);
+module.exports = { playGame, array };
