@@ -29,6 +29,7 @@ const playerWins = [{ playerOneHandWins: 0 }, { playerTwoHandWins: 0 }];
 
 const readline = require("readline");
 const fs = require("fs");
+const { parse } = require("path");
 
 // const readInterface = readline.createInterface({
 //   input: fs.createReadStream("./poker-hands.txt"),
@@ -38,7 +39,6 @@ const fs = require("fs");
 
 // readInterface.on("line", (line) => console.log(line));
 
-let array = fs.readFileSync("./poker-hands.txt").toString().split("\n");
 // for (let i in array) {
 //   console.log(array[i]);
 // }
@@ -46,6 +46,7 @@ let array = fs.readFileSync("./poker-hands.txt").toString().split("\n");
 // console.log(array);
 
 // Test file
+let array = fs.readFileSync("./poker-hands.txt").toString().split("\n");
 
 // Creates data for all possible card combinations and stores it in allCards
 const createAllCards = (uniqueCards, suits) => {
@@ -516,6 +517,17 @@ const playGame = (numberOfGames, runTest = false) => {
           allCards[Math.floor(Math.random() * allCards.length)]
         );
       }
+
+      // Creates a stream file of .txt data containing the numberOfGames specified, with both players hands randomly chosen,
+      // in the format which the test required (first five cards belong to player one, second five cards belong to player 2, etc)
+      // The file created is overwritten as the start of a new game, to avoid multiple files being created.
+      fs.writeFileSync(
+        "./writeFileGame.txt",
+        `${playerOneCardsArray.join(" ")} ${playerTwoCardsArray.join(" ")}\n`,
+        {
+          flag: i === 0 ? null : "a",
+        }
+      );
     } else if (runTest === true) {
       // Test file data
       const newArr = array[i].split(" ");
