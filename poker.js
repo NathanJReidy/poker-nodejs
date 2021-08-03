@@ -65,11 +65,10 @@ const checkFlush = (playerCards, playerIndex) => {
     }
   }
 
-  console.log(`Flush! Suits are identical for playerIndex ${playerIndex}`);
-
   // Sorts the card rankings from highest to lowest
   checkHighCard(playerCards, playerIndex);
 
+  // If suits are identical (flush), return true
   return true;
 };
 
@@ -88,11 +87,7 @@ const checkRoyalFlush = (playerCards, playerIndex) => {
     let royalCards = ["T", "J", "Q", "K", "A"];
     let uniqueCardsRoyalTest = [];
     playerCards.forEach((card, index) => {
-      if (!card.includes("T")) {
-        uniqueCardsRoyalTest.push(card[0]);
-      } else {
-        uniqueCardsRoyalTest.push(card.substr(0, 1));
-      }
+      uniqueCardsRoyalTest.push(card[0]);
     });
 
     // Sorts the card rankings from highest to lowest
@@ -110,11 +105,7 @@ const checkStraight = (playerCards, playerIndex) => {
   const cardIndexInUniqueCards = [];
   playerCards.forEach((card, index) => {
     // Match the specific card to its index in unique cards
-    if (!card.includes("T")) {
-      cardIndexInUniqueCards.push(uniqueCards.indexOf(card[0]));
-    } else {
-      cardIndexInUniqueCards.push(uniqueCards.indexOf(card.substr(0, 1)));
-    }
+    cardIndexInUniqueCards.push(uniqueCards.indexOf(card[0]));
   });
   // Sort items in array in ascending order
   cardIndexInUniqueCards.sort((a, b) => a - b);
@@ -131,11 +122,10 @@ const checkStraight = (playerCards, playerIndex) => {
     }
   }
 
-  console.log(`We have a straight for playerIndex ${playerIndex}!`);
-
   // Sorts the card rankings from highest to lowest
   checkHighCard(playerCards, playerIndex);
 
+  // If straight, return true
   return true;
 };
 
@@ -157,11 +147,7 @@ const checkPair = (playerCards, playerIndex) => {
   let pairValues = [];
   playerCards.forEach((card, index) => {
     // Match the specific card to its index in unique cards
-    if (!card.includes("T")) {
-      cardIndexInUniqueCards.push(uniqueCards.indexOf(card[0]));
-    } else {
-      cardIndexInUniqueCards.push(uniqueCards.indexOf(card.substr(0, 1)));
-    }
+    cardIndexInUniqueCards.push(uniqueCards.indexOf(card.substr(0, 1)));
   });
   // Sort items in array in ascending order
   cardIndexInUniqueCards.sort((a, b) => a - b);
@@ -204,8 +190,6 @@ const checkFourOfAKind = (playerCards, playerIndex) => {
   let fourArray = checkPair(playerCards).filter((card) => card.count == "4");
 
   if (fourArray.length == 1 && fourArray[0].count == "4") {
-    console.log(`Four of a kind for playerIndex ${playerIndex}!`);
-
     // Update the player's high card index ranking:
     const cardIndexInUniqueCards = [];
 
@@ -226,11 +210,7 @@ const checkFourOfAKind = (playerCards, playerIndex) => {
     leftOverCards
       .sort((a, b) => b - a)
       .forEach((card) => {
-        if (!card.toString().includes("T")) {
-          leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 1)));
-        } else {
-          leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 1)));
-        }
+        leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 1)));
       });
 
     // Sorts left over cards from highest to lowest order, and puts them after the pair in terms of index ranking
@@ -245,6 +225,7 @@ const checkFourOfAKind = (playerCards, playerIndex) => {
       playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
     }
 
+    // If four of a kind, return true
     return true;
   } else {
     return false;
@@ -256,8 +237,6 @@ const checkThreeOfAKind = (playerCards, playerIndex) => {
   let threeArray = checkPair(playerCards).filter((card) => card.count == "3");
 
   if (threeArray.length == 1 && threeArray[0].count == "3") {
-    console.log(`Three of a kind for playerIndex ${playerIndex}!`);
-
     // Update the player's high card index ranking:
     const cardIndexInUniqueCards = [];
 
@@ -278,11 +257,7 @@ const checkThreeOfAKind = (playerCards, playerIndex) => {
     leftOverCards
       .sort((a, b) => b - a)
       .forEach((card) => {
-        if (!card.toString().includes("T")) {
-          leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 1)));
-        } else {
-          leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 1)));
-        }
+        leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 1)));
       });
 
     // Sorts left over cards from highest to lowest order, and puts them after the pair in terms of index ranking
@@ -297,6 +272,7 @@ const checkThreeOfAKind = (playerCards, playerIndex) => {
       playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
     }
 
+    // If three of a kind, return true
     return true;
   } else {
     return false;
@@ -307,8 +283,6 @@ const checkThreeOfAKind = (playerCards, playerIndex) => {
 const checkTwoOfAKind = (playerCards, playerIndex) => {
   let twoArray = checkPair(playerCards).filter((card) => card.count == "2");
   if (twoArray.length == 1 && twoArray[0].count == "2") {
-    console.log(`Pair: Two cards of same value for playerIndex ${playerIndex}`);
-
     // Update the player's high card index ranking:
     const cardIndexInUniqueCards = [];
 
@@ -329,11 +303,7 @@ const checkTwoOfAKind = (playerCards, playerIndex) => {
     leftOverCards
       .sort((a, b) => b - a)
       .forEach((card) => {
-        if (!card.toString().includes("T")) {
-          leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 1)));
-        } else {
-          leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 1)));
-        }
+        leftOverArr.push(uniqueCards.indexOf(card.toString().substr(0, 1)));
       });
 
     // Sorts left over cards from highest to lowest order, and puts them after the pair in terms of index ranking
@@ -347,6 +317,7 @@ const checkTwoOfAKind = (playerCards, playerIndex) => {
       playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
     }
 
+    // If two of a kind (pair), return true
     return true;
   } else {
     return false;
@@ -356,10 +327,6 @@ const checkTwoOfAKind = (playerCards, playerIndex) => {
 // Checks it the player has a full house: Three of a kind and a Pair
 const checkFullHouse = (playerCards, playerIndex) => {
   if (checkThreeOfAKind(playerCards) && checkTwoOfAKind(playerCards)) {
-    console.log(
-      `Full house: Three of a kind and a pair for playerIndex ${playerIndex}!`
-    );
-
     // Update the player's high card index ranking:
     const cardIndexInUniqueCards = [];
 
@@ -387,6 +354,7 @@ const checkFullHouse = (playerCards, playerIndex) => {
       playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
     }
 
+    // If full house (three of a kind and a pair), return true
     return true;
   } else {
     return false;
@@ -400,10 +368,6 @@ const checkTwoPair = (playerCards, playerIndex) => {
     checkPair(playerCards)[0].count == "2" &&
     checkPair(playerCards)[1].count == "2"
   ) {
-    console.log(
-      `Two pairs: Two different pairs for playerIndex ${playerIndex}!`
-    );
-
     // Update the player's high card index ranking:
     const cardIndexInUniqueCards = [];
 
@@ -430,15 +394,9 @@ const checkTwoPair = (playerCards, playerIndex) => {
     // Sort items in array in descending order
     cardIndexInUniqueCards.sort((a, b) => b - a);
 
-    if (!leftOverCards.toString().includes("T")) {
-      cardIndexInUniqueCards.push(
-        uniqueCards.indexOf(leftOverCards.toString().substr(0, 1))
-      );
-    } else {
-      cardIndexInUniqueCards.push(
-        uniqueCards.indexOf(leftOverCards.toString().substr(0, 1))
-      );
-    }
+    cardIndexInUniqueCards.push(
+      uniqueCards.indexOf(leftOverCards.toString().substr(0, 1))
+    );
 
     // Stores the index ranks of each card in an array of highest indexed cards to lowest indexed cards, for each player
     if (playerIndex == 0) {
@@ -447,6 +405,7 @@ const checkTwoPair = (playerCards, playerIndex) => {
       playerRanks[1].playerTwoHighCardRanks = cardIndexInUniqueCards;
     }
 
+    // If two different pairs, return true
     return true;
   } else {
     return false;
@@ -458,12 +417,7 @@ const checkHighCard = (playerCards, playerIndex) => {
 
   playerCards.forEach((card, index) => {
     // Match the specific card to its index in unique cards
-
-    if (!card.toString().includes("T")) {
-      cardIndexInUniqueCards.push(uniqueCards.indexOf(card[0]));
-    } else {
-      cardIndexInUniqueCards.push(uniqueCards.indexOf(card.substr(0, 1)));
-    }
+    cardIndexInUniqueCards.push(uniqueCards.indexOf(card[0]));
   });
   // Sort items in array in descending order
   cardIndexInUniqueCards.sort((a, b) => b - a);
@@ -485,14 +439,14 @@ const checkTieBreaker = (playerOneCards, playerTwoCards) => {
       playerRanks[0].playerOneHighCardRanks[i] >
       playerRanks[1].playerTwoHighCardRanks[i]
     ) {
-      console.log("Player 1 wins in a tie break with the highest card! ");
+      // Player 1 wins in a tie break, with the highest ranking card
       playerWins[0].playerOneHandWins += 1;
       break;
     } else if (
       playerRanks[0].playerOneHighCardRanks[i] <
       playerRanks[1].playerTwoHighCardRanks[i]
     ) {
-      console.log("Player 2 wins in a tie break with the highest card! ");
+      // Player 2 wins in a tie break, with the highest ranking card
       playerWins[1].playerTwoHandWins += 1;
       break;
     }
@@ -533,26 +487,23 @@ const checkResults = (playerOneCards, playerTwoCards) => {
     }
   });
 
-  console.log(`the player ranks are: ${JSON.stringify(playerRanks)}`);
-
   // Check winner and add one to handWinCount for the winner
 };
 
 const checkWinner = (playerOneCards, playerTwoCards) => {
   if (playerRanks[0].playerOneComboRank > playerRanks[1].playerTwoComboRank) {
+    // PLayer 1 wins, based on combination rank alone
     playerWins[0].playerOneHandWins += 1;
-    console.log(playerWins);
   } else if (
     playerRanks[1].playerTwoComboRank > playerRanks[0].playerOneComboRank
   ) {
+    // Player 2 wins, based on combination rank alone
     playerWins[1].playerTwoHandWins += 1;
-    console.log(playerWins);
   } else if (
     playerRanks[0].playerOneComboRank == playerRanks[1].playerTwoComboRank
   ) {
-    console.log("Tie! Let's start the checkTieBreaker function!");
+    // If both players have the same combination rank, check for tie based on high card ranking
     checkTieBreaker(playerOneCards, playerTwoCards);
-    console.log(playerWins);
   }
 };
 
@@ -580,7 +531,11 @@ const playGame = (numberOfGames) => {
 
     checkResults(playerOneCardsArray, playerTwoCardsArray);
     checkWinner(playerOneCardsArray, playerTwoCardsArray);
-    console.log(`     `);
+    if (i === numberOfGames - 1) {
+      console.log(
+        `Player 1: ${playerWins[0].playerOneHandWins}, Player 2: ${playerWins[1].playerTwoHandWins}`
+      );
+    }
   }
 };
 
